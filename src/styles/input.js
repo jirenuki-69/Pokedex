@@ -19,7 +19,7 @@ export const Container = styled.div`
   svg {
     width: 20px;
     height: 20px;
-    margin-right: 10px;
+    margin-right: 25px;
     color: ${({ theme }) => theme.colors.text.gray};
 
     opacity: ${({ isFocused }) => (isFocused ? 1 : 0.8)};
@@ -31,7 +31,7 @@ export const Container = styled.div`
     color: ${({ theme }) => theme.colors.text.gray};
     border: none;
     background: transparent;
-    text-align: center;
+    text-align: left;
   }
 
   ${media.lessThan('medium')`

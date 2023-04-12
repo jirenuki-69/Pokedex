@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import InputSearch from '../components/InputSearch';
+import { FaSearch } from 'react-icons/fa';
+import InputSearch from '../components/Input';
 import CardPokemon from '../components/CardPokemon';
 import { Container, Pokemons } from '../styles/home';
 import api from '../services/api';
 import { Pokeball } from '../assets/patterns';
-import { isEmpty } from 'lodash';
 
 const HomePage = () => {
   const { VITE_POKEMON_MAX_NUMBER, VITE_MAX_POKEMON } = import.meta.env;
@@ -13,9 +13,11 @@ const HomePage = () => {
   const [pokemons, setPokemons] = useState([]);
   const [pokemonSearch, setPokemonSearch] = useState('');
   const [pokemonsOffsetApi, setPokemonsOffsetApi] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   // Filtrado de Pokémons segun el string del campo
   const handleSearchPokemons = useCallback(async () => {
+    setLoading(true);
     const response = await api.get(
       `/pokemon?limit=${Number(VITE_MAX_POKEMON)}`
     );
@@ -25,18 +27,38 @@ const HomePage = () => {
     const pokemonsSearch = response.data.results.filter(({ name }) =>
       name.includes(pokemonSearch)
     );
+
     setPokemons(pokemonsSearch);
+    setLoading(false);
   }, [pokemonSearch]);
 
   // Carga una lista inicial de Pokémons
-  const handlePokemonsListDefault = useCallback(async () => {
+  const handlePokemonsListDefault = async () => {
+    setLoading(true);
     const response = await api.get('/pokemon', {
       params: {
         limit: pokemonNumber
       }
     });
     setPokemons(response.data.results);
-  }, []);
+    setLoading(false);
+  };
+
+  const handleMorePokemons = useCallback(
+    async (offset) => {
+      setLoading(true);
+      const response = await api.get(`/pokemon`, {
+        params: {
+          limit: pokemonNumber,
+          offset
+        }
+      });
+
+      setPokemons((state) => [...state, ...response.data.results]);
+      setLoading(false);
+    },
+    [pokemonNumber, pokemonsOffsetApi]
+  );
 
   const scrollListener = () => {
     if (
@@ -56,21 +78,14 @@ const HomePage = () => {
   }, [pokemonSearch, handlePokemonsListDefault, handleSearchPokemons]);
 
   useEffect(() => {
+    handlePokemonsListDefault();
+    // Listener para saber cuando el usuario se encuentre scrolleando hasta el final
     window.addEventListener('scroll', scrollListener);
+
+    return () => window.removeEventListener('scroll', scrollListener);
   }, []);
 
   useEffect(() => {
-    const handleMorePokemons = async (offset) => {
-      const response = await api.get(`/pokemon`, {
-        params: {
-          limit: pokemonNumber,
-          offset
-        }
-      });
-  
-      setPokemons((state) => [...state, ...response.data.results]);
-    }
-
     handleMorePokemons(pokemonsOffsetApi);
   }, [pokemonsOffsetApi]);
 
@@ -78,12 +93,18 @@ const HomePage = () => {
     <Container>
       <Pokeball />
       <h1>Pokédex</h1>
-      <InputSearch value={pokemonSearch} onChange={setPokemonSearch} />
+      <InputSearch
+        value={pokemonSearch}
+        onChange={setPokemonSearch}
+        placeholder="¿Qué pokémon andas buscando?"
+        icon={<FaSearch />}
+      />
       <Pokemons>
         {pokemons.map((pokemon) => (
           <CardPokemon key={pokemon.name} name={pokemon.name} />
         ))}
       </Pokemons>
+      {loading && <h1>Loading...</h1>}
     </Container>
   );
 };

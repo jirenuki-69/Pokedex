@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import ProtectedRoutes from '../utils/PrivateRoute';
+import ProtectedRoutes from '../utils/ProtectedRoutes';
 
 // Importamos los componentes de las páginas
 import LoginPage from '../pages/LoginPage';
