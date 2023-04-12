@@ -33,16 +33,17 @@ const HomePage = () => {
   }, [pokemonSearch]);
 
   // Carga una lista inicial de Pokémons
-  const handlePokemonsListDefault = async () => {
+  const handlePokemonsListDefault = useCallback(async () => {
     setLoading(true);
     const response = await api.get('/pokemon', {
       params: {
         limit: pokemonNumber
       }
     });
+
     setPokemons(response.data.results);
     setLoading(false);
-  };
+  }, [pokemonNumber]);
 
   const handleMorePokemons = useCallback(
     async (offset) => {
@@ -57,7 +58,7 @@ const HomePage = () => {
       setPokemons((state) => [...state, ...response.data.results]);
       setLoading(false);
     },
-    [pokemonNumber, pokemonsOffsetApi]
+    [pokemonsOffsetApi]
   );
 
   const scrollListener = () => {
@@ -74,8 +75,7 @@ const HomePage = () => {
     const isSearch = pokemonSearch.length >= 2;
 
     if (isSearch) handleSearchPokemons();
-    else handlePokemonsListDefault();
-  }, [pokemonSearch, handlePokemonsListDefault, handleSearchPokemons]);
+  }, [pokemonSearch, handleSearchPokemons]);
 
   useEffect(() => {
     handlePokemonsListDefault();
@@ -86,8 +86,10 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    handleMorePokemons(pokemonsOffsetApi);
-  }, [pokemonsOffsetApi]);
+    if (pokemonsOffsetApi !== 0) {
+      handleMorePokemons(pokemonsOffsetApi);
+    }
+  }, [handleMorePokemons, pokemonsOffsetApi]);
 
   return (
     <Container>
