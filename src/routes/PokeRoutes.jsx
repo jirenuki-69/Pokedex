@@ -5,14 +5,14 @@ import ProtectedRoutes from '../utils/ProtectedRoutes';
 // Importamos los componentes de las páginas
 import LoginPage from '../pages/LoginPage';
 import HomePage from '../pages/HomePage';
-import PokemonDetailPage from '../pages/PokemonDetailPage';
+import PokemonDetailPage from '../pages/Details/PokemonDetailPage';
 
 const PokeRoutes = () => {
   return (
     <Routes>
       <Route element={<ProtectedRoutes />}>
         <Route element={<HomePage />} path="/" exact />
-        <Route element={<PokemonDetailPage />} path="/pokemon/:id" />
+        <Route element={<PokemonDetailPage />} path="/pokemon/:name" />
       </Route>
       <Route element={<LoginPage />} path="/login" />
     </Routes>

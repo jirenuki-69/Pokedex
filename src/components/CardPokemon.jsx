@@ -10,8 +10,11 @@ import {
   Pokemon,
   PokemonNumber,
   PokemonName,
-  PokemonType
+  PokemonType,
+  PokemonAbilitiesContainer,
+  PokemonAbility
 } from '../styles/card';
+import { normalizeAbilities } from '../utils/pokemon';
 
 const CardPokemon = ({ name }) => {
   const { colors } = useTheme();
@@ -19,7 +22,8 @@ const CardPokemon = ({ name }) => {
 
   useEffect(() => {
     api.get(`/pokemon/${name}`).then((response) => {
-      const { id, types, sprites } = response.data;
+      const { id, types, sprites, abilities } = response.data;
+      const normalizedAbilities = normalizeAbilities(abilities);
 
       let backgroundColor = types[0].type.name;
 
@@ -34,14 +38,17 @@ const CardPokemon = ({ name }) => {
         backgroundColor: colors.backgroundType[backgroundColor],
         image: sprites.other['official-artwork'].front_default,
         type: types.map((pokemonType) => {
-          const { type: { name: typeName } } = pokemonType;
+          const {
+            type: { name: typeName }
+          } = pokemonType;
 
           return {
             name: typeName,
             icon: iconTypePokemon[typeName],
             color: colors.type[typeName]
           };
-        })
+        }),
+        abilities: normalizedAbilities
       });
     });
   }, [name, colors]);
@@ -59,6 +66,13 @@ const CardPokemon = ({ name }) => {
               </PokemonType>
             ))}
           </div>
+        )}
+        {pokemon.abilities && (
+          <PokemonAbilitiesContainer>
+            {pokemon.abilities.map((ability) => (
+              <PokemonAbility key={ability}>{ability}</PokemonAbility>
+            ))}
+          </PokemonAbilitiesContainer>
         )}
         <Pokeball />
       </Pokemon>

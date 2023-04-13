@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Container } from '../styles/input';

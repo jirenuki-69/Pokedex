@@ -55,6 +55,10 @@ export const Container = styled.div`
 
   ${media.lessThan('medium')`
     padding: 10px;
+
+    > h1 {
+      text-align: center;
+    }
   `};
 `;
 

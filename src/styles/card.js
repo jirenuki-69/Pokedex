@@ -1,11 +1,12 @@
 import styled from 'styled-components';
+import media from 'styled-media-query';
 import { Link } from 'react-router-dom';
 
 export const Container = styled(Link)`
   position: relative;
 
   display: flex;
-  height: 180px;
+  height: auto;
   width: inherit;
 
   border-radius: 6px;
@@ -36,6 +37,25 @@ export const Container = styled(Link)`
       top: -45px;
     }
   }
+
+  ${media.lessThan('small')`
+    height: 300px;
+    
+    > img {
+      top: -60px;
+      right: 15%;
+    }
+
+    &:hover {
+      cursor: pointer;
+      border-radius: 15px;
+  
+      > img {
+        filter: grayscale(0);
+        top: -65px;
+      }
+    }
+  `}
 `;
 
 export const Pokemon = styled.div`
@@ -47,6 +67,7 @@ export const Pokemon = styled.div`
   justify-content: center;
 
   position: relative;
+  padding: 15px;
   padding-left: 30px;
 
   > svg {
@@ -60,7 +81,7 @@ export const Pokemon = styled.div`
       fill: rgba(255, 255, 255, 0.2);
     }
   }
-  /* Seção dos types do pokémon */
+  /* Sección de tipos de pokemon */
   div {
     display: flex;
     flex-direction: row;
@@ -68,13 +89,17 @@ export const Pokemon = styled.div`
 
     margin-top: 5px;
   }
+
+  ${media.lessThan('small')`
+    margin-top: 100px
+  `}
 `;
 
 export const PokemonNumber = styled.span`
   font-size: 20px;
   font-weight: bold;
   letter-spacing: 2px;
-  /* O número 99 aplica uma opacidade de 60% no hex da cor */
+  /* El número 99 aplica una opacidad del 60 % al hexágono de color. */
   color: ${({ theme }) => theme.colors.text.number}99;
 `;
 
@@ -118,4 +143,20 @@ export const PokemonType = styled.div`
     line-height: 14px;
     text-transform: capitalize;
   }
+`;
+
+export const PokemonAbilitiesContainer = styled.div`
+  margin-top: 10px;
+  div:last-child {
+    margin-right: 0px;
+  }
+`;
+
+export const PokemonAbility = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 45px;
+  text-transform: capitalize;
+  margin-right: 10px;
+  color: ${({ theme }) => theme.colors.text.white};
 `;

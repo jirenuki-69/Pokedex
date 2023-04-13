@@ -1,7 +1,9 @@
 import { isEmpty } from 'lodash';
 import Swal from 'sweetalert2';
 
-export const isLoggedIn = !isEmpty(localStorage.getItem('user'));
+export const isLoggedIn = () =>
+  !isEmpty(localStorage.getItem('email')) &&
+  !isEmpty(localStorage.getItem('password'));
 
 export const isValidEmail = (email) => {
   // Expresión regular para validar correo electrónico
@@ -32,5 +34,12 @@ export const sendToast = ({ message, type }) => {
   });
 };
 
-export const setLocalStorageItems = ({ email, password }) =>
-  localStorage.setItem('user', { email, password });
+export const setLocalStorageItems = ({ email, password }) => {
+  localStorage.setItem('email', email);
+  localStorage.setItem('password', password);
+};
+
+export const capitalizeSnakeCase = (value) =>
+  value
+    .replace(/^[-_]*(.)/, (_, c) => c.toUpperCase())
+    .replace(/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase());

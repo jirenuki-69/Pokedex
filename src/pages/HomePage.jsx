@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import { isEmpty } from 'lodash';
 import InputSearch from '../components/Input';
 import CardPokemon from '../components/CardPokemon';
 import { Container, Pokemons } from '../styles/home';
@@ -71,11 +72,12 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    // Empieza a buscar con igual o más de 2 caracteres
-    const isSearch = pokemonSearch.length >= 2;
+    //Empieza a buscar pokémons si hay algo en el texto, en caso contrario trae los default
+    const isSearch = pokemonSearch.length >= 1;
 
     if (isSearch) handleSearchPokemons();
-  }, [pokemonSearch, handleSearchPokemons]);
+    else handlePokemonsListDefault();
+  }, [pokemonSearch, handleSearchPokemons, handlePokemonsListDefault]);
 
   useEffect(() => {
     handlePokemonsListDefault();
@@ -86,7 +88,7 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    if (pokemonsOffsetApi !== 0) {
+    if (pokemonsOffsetApi !== 0 && isEmpty(pokemonSearch)) {
       handleMorePokemons(pokemonsOffsetApi);
     }
   }, [handleMorePokemons, pokemonsOffsetApi]);
@@ -98,7 +100,7 @@ const HomePage = () => {
       <InputSearch
         value={pokemonSearch}
         onChange={setPokemonSearch}
-        placeholder="¿Qué pokémon andas buscando?"
+        placeholder="¡Busca tu Pokémon!"
         icon={<FaSearch />}
       />
       <Pokemons>
