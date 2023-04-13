@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 
 import api from '../services/api';
@@ -12,18 +13,30 @@ import {
   PokemonName,
   PokemonType,
   PokemonAbilitiesContainer,
-  PokemonAbility
+  PokemonAbility,
+  PokemonFooter,
+  ShinyButton
 } from '../styles/card';
-import { normalizeAbilities } from '../utils/pokemon';
+import { normalizeAbilities, normalizeSprites } from '../utils/pokemon';
 
 const CardPokemon = ({ name }) => {
   const { colors } = useTheme();
+  const navigate = useNavigate();
   const [pokemon, setPokemon] = useState({});
+
+  const handlePopUpShiny = () => {
+    console.log(pokemon)
+    window.open(pokemon?.shinySpriteUrl);
+  };
 
   useEffect(() => {
     api.get(`/pokemon/${name}`).then((response) => {
       const { id, types, sprites, abilities } = response.data;
+
       const normalizedAbilities = normalizeAbilities(abilities);
+      const shinySpriteUrl = normalizeSprites(sprites)?.find(
+        ({ label }) => label === 'Front Shiny'
+      )?.image;
 
       let backgroundColor = types[0].type.name;
 
@@ -48,13 +61,14 @@ const CardPokemon = ({ name }) => {
             color: colors.type[typeName]
           };
         }),
-        abilities: normalizedAbilities
+        abilities: normalizedAbilities,
+        shinySpriteUrl
       });
     });
   }, [name, colors]);
 
   return (
-    <Container to={`pokemon/${name}`} color={pokemon.backgroundColor}>
+    <Container color={pokemon.backgroundColor}>
       <Pokemon>
         <PokemonNumber>#{pokemon.id}</PokemonNumber>
         <PokemonName>{name}</PokemonName>
@@ -67,16 +81,27 @@ const CardPokemon = ({ name }) => {
             ))}
           </div>
         )}
-        {pokemon.abilities && (
-          <PokemonAbilitiesContainer>
-            {pokemon.abilities.map((ability) => (
-              <PokemonAbility key={ability}>{ability}</PokemonAbility>
-            ))}
-          </PokemonAbilitiesContainer>
-        )}
+        <PokemonFooter>
+          {pokemon.abilities && (
+            <PokemonAbilitiesContainer>
+              {pokemon.abilities.map((ability) => (
+                <PokemonAbility key={ability}>{ability}</PokemonAbility>
+              ))}
+            </PokemonAbilitiesContainer>
+          )}
+          <ShinyButton type="button" onClick={handlePopUpShiny}>
+            Shiny
+          </ShinyButton>
+        </PokemonFooter>
         <Pokeball />
       </Pokemon>
-      {pokemon.image && <img src={pokemon.image} alt={`${name} image`} />}
+      {pokemon.image && (
+        <img
+          src={pokemon.image}
+          alt={`${name} image`}
+          onClick={() => navigate(`pokemon/${name}`)}
+        />
+      )}
     </Container>
   );
 };

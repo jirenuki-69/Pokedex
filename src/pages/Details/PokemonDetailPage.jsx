@@ -16,7 +16,6 @@ import { FaChevronLeft } from 'react-icons/fa';
 import api from '../../services/api';
 import { getPokemonDetails } from '../../utils/pokemon';
 import { PokemonName, PokemonNumber, PokemonType } from '../../styles/card';
-import { Pokeball } from '../../assets/patterns';
 import About from './screens/About';
 import Stats from './screens/Stats';
 import Evolution from './screens/Evolution';

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import media from 'styled-media-query';
 import { Link } from 'react-router-dom';
 
-export const Container = styled(Link)`
+export const Container = styled.div`
   position: relative;
 
   display: flex;
@@ -26,13 +26,9 @@ export const Container = styled(Link)`
     filter: grayscale(100%);
     -webkit-transition: -webkit-filter 400ms ease;
     transition: all ease 0.4s;
-  }
 
-  &:hover {
-    cursor: pointer;
-    border-radius: 15px;
-
-    > img {
+    &:hover {
+      cursor: pointer;
       filter: grayscale(0);
       top: -45px;
     }
@@ -44,13 +40,9 @@ export const Container = styled(Link)`
     > img {
       top: -60px;
       right: 15%;
-    }
-
-    &:hover {
-      cursor: pointer;
-      border-radius: 15px;
-  
-      > img {
+      &:hover {
+        cursor: pointer;
+        border-radius: 15px;
         filter: grayscale(0);
         top: -65px;
       }
@@ -87,11 +79,14 @@ export const Pokemon = styled.div`
     flex-direction: row;
     align-items: center;
 
-    margin-top: 5px;
+    margin-top: 15px;
   }
 
   ${media.lessThan('small')`
-    margin-top: 100px
+    margin-top: 100px;
+    div {
+      margin-top: 5px;
+    }
   `}
 `;
 
@@ -145,6 +140,15 @@ export const PokemonType = styled.div`
   }
 `;
 
+export const PokemonFooter = styled.div`
+  display: flex;
+  flex: 1;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export const PokemonAbilitiesContainer = styled.div`
   margin-top: 10px;
   div:last-child {
@@ -159,4 +163,13 @@ export const PokemonAbility = styled.div`
   text-transform: capitalize;
   margin-right: 10px;
   color: ${({ theme }) => theme.colors.text.white};
+`;
+
+export const ShinyButton = styled.button`
+  background: transparent;
+  color: black !important;
+  font-weight: bold !important;
+  margin: 0px !important;
+  width: 100px !important;
+  color: #fff !important;
 `;
