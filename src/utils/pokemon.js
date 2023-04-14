@@ -1,6 +1,7 @@
 import axios from 'axios';
 import pokemonTypes from '../assets/types';
 import { capitalizeSnakeCase } from '.';
+import api from '../services/api';
 
 export const normalizeAbilities = (abilities) => {
   return abilities.map(({ ability: { name } }) => name);
@@ -76,3 +77,44 @@ export const pokemonPreviousSprite = (currentSprite, spritesLength) =>
 
 export const pokemonNextSprite = (currentSprite, spritesLength) =>
   currentSprite === spritesLength - 1 ? 0 : currentSprite + 1;
+
+export const getIndividualPokemonDetails = async (data, colors) => {
+  return await Promise.all(
+    data.map(async ({ name }) => {
+      return await api.get(`/pokemon/${name}`).then((response) => {
+        const { id, types, sprites, abilities } = response.data;
+
+        const normalizedAbilities = normalizeAbilities(abilities);
+        const shinySpriteUrl = normalizeSprites(sprites)?.find(
+          ({ label }) => label === 'Front Shiny'
+        )?.image;
+
+        let backgroundColor = types[0].type.name;
+
+        if (backgroundColor === 'normal' && types.length > 1) {
+          backgroundColor = types[1].type.name;
+        }
+
+        return {
+          id,
+          name,
+          backgroundColor: colors.backgroundType[backgroundColor],
+          image: sprites.other['official-artwork'].front_default,
+          type: types.map((pokemonType) => {
+            const {
+              type: { name: typeName }
+            } = pokemonType;
+
+            return {
+              name: typeName,
+              icon: pokemonTypes[typeName],
+              color: colors.type[typeName]
+            };
+          }),
+          abilities: normalizedAbilities,
+          shinySpriteUrl
+        };
+      });
+    })
+  );
+};

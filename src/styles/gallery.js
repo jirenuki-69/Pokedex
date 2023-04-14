@@ -14,6 +14,10 @@ export const Container = styled.div`
   ${media.greaterThan('small')`
     width: 30%;
   `}
+
+  > svg:hover {
+    cursor: pointer;
+  }
 `;
 
 export const SpriteImage = styled.img`

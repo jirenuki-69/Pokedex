@@ -16,7 +16,7 @@ import {
   PokemonAbility,
   PokemonFooter,
   ShinyButton
-} from '../styles/card';
+} from '../styles/grid/card';
 import { normalizeAbilities, normalizeSprites } from '../utils/pokemon';
 
 const CardPokemon = ({ name }) => {
@@ -25,7 +25,6 @@ const CardPokemon = ({ name }) => {
   const [pokemon, setPokemon] = useState({});
 
   const handlePopUpShiny = () => {
-    console.log(pokemon)
     window.open(pokemon?.shinySpriteUrl);
   };
 
@@ -70,6 +69,7 @@ const CardPokemon = ({ name }) => {
   return (
     <Container color={pokemon.backgroundColor}>
       <Pokemon>
+        <Pokeball />
         <PokemonNumber>#{pokemon.id}</PokemonNumber>
         <PokemonName>{name}</PokemonName>
         {pokemon.type && (
@@ -84,8 +84,12 @@ const CardPokemon = ({ name }) => {
         <PokemonFooter>
           {pokemon.abilities && (
             <PokemonAbilitiesContainer>
-              {pokemon.abilities.map((ability) => (
-                <PokemonAbility key={ability}>{ability}</PokemonAbility>
+              {pokemon.abilities.map((ability, index) => (
+                <PokemonAbility
+                  key={`${pokemon.name} ability: ${ability} ${index}`}
+                >
+                  {ability}
+                </PokemonAbility>
               ))}
             </PokemonAbilitiesContainer>
           )}
@@ -93,7 +97,6 @@ const CardPokemon = ({ name }) => {
             Shiny
           </ShinyButton>
         </PokemonFooter>
-        <Pokeball />
       </Pokemon>
       {pokemon.image && (
         <img

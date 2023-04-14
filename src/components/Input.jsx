@@ -2,7 +2,8 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Container } from '../styles/input';
 
-const Input = ({ value, onChange, placeholder, icon, required, type }) => {
+const Input = ({ onEnterPress, placeholder, icon, required, type }) => {
+  const [value, setValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
   const handleInputBlur = useCallback(() => {
@@ -13,13 +14,20 @@ const Input = ({ value, onChange, placeholder, icon, required, type }) => {
     setIsFocused(true);
   }, []);
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      onEnterPress(value);
+    }
+  };
+
   return (
     <Container isFocused={isFocused}>
       {icon}
       <input
         placeholder={isFocused ? '' : placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={handleKeyPress}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         type={type}
@@ -37,8 +45,7 @@ Input.defaultValues = {
 };
 
 Input.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onEnterPress: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   icon: PropTypes.element,
   required: PropTypes.bool,

@@ -62,21 +62,26 @@ export const Container = styled.div`
   `};
 `;
 
-export const Pokemons = styled.div`
-  flex: 1;
+export const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  row-gap: 15px;
+  margin-bottom: ${({ mode }) => mode === 'grid' ? '60px' : '20px'};
 
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 60px;
+  ${media.greaterThan('small')`
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  `}
+`;
 
-  ${media.lessThan('huge')`
-    grid-template-columns: repeat(2, 1fr);
-  `};
-
-  ${media.lessThan('medium')`
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 50px;
-  `};
+export const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
 `;
