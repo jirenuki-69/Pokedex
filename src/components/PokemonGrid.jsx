@@ -54,7 +54,7 @@ const PokemonGrid = ({ pokemonSearch }) => {
           <CardPokemon key={pokemon.name} name={pokemon.name} />
         ))}
       </Container>
-      {state.loading || (!state.loading && <PokeballLoader />)}
+      {state.loading && <PokeballLoader />}
     </>
   );
 };
