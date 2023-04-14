@@ -10,6 +10,7 @@ import {
   searchPokemons
 } from '../features/grid/gridActions';
 import { incrementOffset } from '../features/grid/gridSlice';
+import { PokeballLoader } from '../styles/loader';
 
 const PokemonGrid = ({ pokemonSearch }) => {
   const dispatch = useDispatch();
@@ -47,12 +48,14 @@ const PokemonGrid = ({ pokemonSearch }) => {
   }, [state.offset]);
 
   return (
-    <Container>
-      {state.pokemons.map((pokemon) => (
-        <CardPokemon key={pokemon.name} name={pokemon.name} />
-      ))}
-      {state.loading && <h1>Loading...</h1>}
-    </Container>
+    <>
+      <Container>
+        {state.pokemons.map((pokemon) => (
+          <CardPokemon key={pokemon.name} name={pokemon.name} />
+        ))}
+      </Container>
+      {state.loading || (!state.loading && <PokeballLoader />)}
+    </>
   );
 };
 

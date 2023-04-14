@@ -1,21 +1,14 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from 'styled-components';
 import PropTypes from 'prop-types';
 import {
   Container,
-  Image,
   StyledTable,
-  TableCell,
   TableHeader,
-  Label,
-  PokemonType,
-  TableRow,
-  ShinyButton,
   TableHead
 } from '../../styles/table';
-import { capitalize, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import TableFooter from './TableFooter';
 import { getNewPage } from '../../utils/pagination';
 import {
@@ -25,6 +18,7 @@ import {
 } from '../../features/table/tableActions';
 import { setCurrentPage } from '../../features/table/tableSlice';
 import PokemonRow from './PokemonRow';
+import { PokeballLoader } from '../../styles/loader';
 
 const Table = ({ pokemonSearch }) => {
   const dispatch = useDispatch();
@@ -65,29 +59,30 @@ const Table = ({ pokemonSearch }) => {
   return (
     <>
       <Container>
-        <StyledTable>
-          <TableHead>
-            <tr>
-              <TableHeader>#</TableHeader>
-              <TableHeader>Nombre</TableHeader>
-              <TableHeader>Imagen</TableHeader>
-              <TableHeader>Tipos</TableHeader>
-              <TableHeader>Habilidades</TableHeader>
-              <TableHeader>Shiny</TableHeader>
-            </tr>
-          </TableHead>
-          <tbody>
-            {!isEmpty(state.pokemons) &&
-              !state.loading &&
-              state.pokemons.map((pokemon) => (
+        {!isEmpty(state.pokemons) && !state.loading && (
+          <StyledTable>
+            <TableHead>
+              <tr>
+                <TableHeader>#</TableHeader>
+                <TableHeader>Nombre</TableHeader>
+                <TableHeader>Imagen</TableHeader>
+                <TableHeader>Tipos</TableHeader>
+                <TableHeader>Habilidades</TableHeader>
+                <TableHeader>Shiny</TableHeader>
+              </tr>
+            </TableHead>
+            <tbody>
+              {state.pokemons.map((pokemon) => (
                 <PokemonRow
                   pokemon={pokemon}
                   handlePopUpShiny={handlePopUpShiny}
                 />
               ))}
-          </tbody>
-        </StyledTable>
-        {state.loading && <h1>Loading...</h1>}
+            </tbody>
+          </StyledTable>
+        )}
+
+        {state.loading && <PokeballLoader />}
       </Container>
       <TableFooter
         currentPage={state.currentPage}
