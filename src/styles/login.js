@@ -5,15 +5,21 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  justify-content: center;
   padding: 25px;
   width: 100%;
-  height: 100%;
+  height: 100vh;
 
   > h1 {
     font-weight: bold;
     font-size: 50px;
 
     color: ${({ theme }) => theme.colors.text.black};
+  }
+
+  img {
+    display: flex;
+    align-self: center;
   }
 
   button {
@@ -24,6 +30,7 @@ export const Container = styled.div`
     height: 50px;
     background: #5a92a5;
     margin: 30px auto 0;
+    font-weight: bold;
 
     outline: 0;
     border: 0;
@@ -45,6 +52,7 @@ export const Container = styled.div`
     flex-direction: row;
     flex-wrap: nowrap;
     height: 100vh;
+    width: 100%;
   `};
 `;
 
@@ -73,7 +81,7 @@ export const LogoContainer = styled.div`
 
 export const FormContainer = styled.form`
   display: flex;
-  flex: 3;
+  flex: 2;
   flex-direction: column;
   width: 100%;
   align-items: center;
@@ -86,10 +94,12 @@ export const FormContainer = styled.form`
 
   > div {
     width: 90%;
-    margin-bottom: 10px
+    margin-bottom: 10px;
   }
 
   ${media.greaterThan('medium')`
+    flex: 3;
+  
     > div {
       width: 70%;
     }

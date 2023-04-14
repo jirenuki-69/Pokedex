@@ -68,7 +68,7 @@ export const Header = styled.div`
   justify-content: flex-start;
   align-items: stretch;
   row-gap: 15px;
-  margin-bottom: ${({ mode }) => mode === 'grid' ? '60px' : '20px'};
+  margin-bottom: ${({ mode }) => (mode === 'grid' ? '60px' : '20px')};
 
   ${media.greaterThan('small')`
     flex-direction: row;
@@ -84,4 +84,26 @@ export const ButtonsContainer = styled.div`
   justify-content: center;
   align-items: center;
   column-gap: 10px;
+`;
+
+export const LogoutButton = styled.button`
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0px !important;
+  width: auto !important;
+  height: auto !important;
+  background-color: #f23838 !important;
+  border: 1px solid black !important;
+
+  &:hover {
+    background: linear-gradient(to bottom, #f25252 5%, #f23838 100%) !important;
+  }
+
+  p {
+    color: white;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+  }
 `;

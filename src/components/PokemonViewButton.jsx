@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { ViewButton } from '../styles/pokemonViewButton';
 
-const PokemonViewButton = ({ text, onClick, active }) => {
-  return (
-    <ViewButton onClick={onClick} active={active}>
-      <p>{text}</p>
-    </ViewButton>
-  );
-};
+const PokemonViewButton = ({ text, onClick, active }) => (
+  <ViewButton onClick={onClick} active={active}>
+    <p>{text}</p>
+  </ViewButton>
+);
 
 PokemonViewButton.defaultValues = {
   active: false

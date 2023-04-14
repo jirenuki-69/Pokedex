@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Container } from '../styles/input';
 
-const Input = ({ onEnterPress, placeholder, icon, required, type }) => {
+const Input = ({ onChange, onEnterPress, placeholder, icon, required, type }) => {
   const [value, setValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
@@ -26,7 +26,10 @@ const Input = ({ onEnterPress, placeholder, icon, required, type }) => {
       <input
         placeholder={isFocused ? '' : placeholder}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
         onKeyDown={handleKeyPress}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
@@ -41,11 +44,14 @@ Input.defaultValues = {
   placeholder: '',
   icon: null,
   required: false,
-  type: 'text'
+  type: 'text',
+  onChange: (value) => {},
+  onKeyPress: () => {}
 };
 
 Input.propTypes = {
-  onEnterPress: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+  onEnterPress: PropTypes.func,
   placeholder: PropTypes.string,
   icon: PropTypes.element,
   required: PropTypes.bool,

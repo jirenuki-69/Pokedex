@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Container,
   Divider,
@@ -9,31 +10,39 @@ import {
 import logo from '../assets/img/bg.png';
 import Input from '../components/Input';
 import { FaLock, FaMailBulk } from 'react-icons/fa';
-import { isValidEmail, isValidPassword, sendToast, setLocalStorageItems } from '../utils';
+import { setText, login, reset } from '../features/login/loginSlice';
+import { setAuth, login as authLogin } from '../features/auth/authSlice';
+import { sendToast } from '../utils';
 
-//! IMPLEMENTAR REDUX
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const { email, password, success, error, errorMessage } = useSelector(
+    (state) => state.login
+  );
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    const validEmail = isValidEmail(email);
-    const validPassword = isValidPassword(password);
-
-    if (!validEmail || !validPassword) {
-      sendToast({ message: 'Inicio de sesión inválido', type: 'error' })
-    }
-    else {
-      setLocalStorageItems({ email, password });
-      navigate('/');
-    }
-      
+    dispatch(login());
   };
 
   const handleLogin = (event) => {
     event.preventDefault();
   };
+
+  useEffect(() => {
+    if (success) {
+      dispatch(setAuth(true));
+      dispatch(authLogin({ email, password }));
+      dispatch(reset());
+      navigate('/');
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (error) {
+      sendToast({ message: errorMessage, type: 'error' });
+    }
+  }, [error]);
 
   return (
     <>
@@ -47,7 +56,7 @@ const LoginPage = () => {
           <Input
             value={email}
             placeholder="Correo electrónico"
-            onChange={setEmail}
+            onChange={(value) => dispatch(setText({ field: 'email', value }))}
             icon={<FaMailBulk />}
             type="email"
             required
@@ -55,7 +64,9 @@ const LoginPage = () => {
           <Input
             value={password}
             placeholder="Contraseña"
-            onChange={setPassword}
+            onChange={(value) =>
+              dispatch(setText({ field: 'password', value }))
+            }
             icon={<FaLock />}
             type="password"
             required

@@ -14,3 +14,8 @@ export const statsContent = [
   { title: 'Defensa Especial', field: 'specialDefense' },
   { title: 'Velocidad', field: 'speed' }
 ];
+
+export const modes = [
+  { label: 'Lista', value: 'list' },
+  { label: 'Cuadrícula', value: 'grid' }
+];
