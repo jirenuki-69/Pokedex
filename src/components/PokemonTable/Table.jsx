@@ -81,9 +81,8 @@ const Table = ({ pokemonSearch }) => {
             </tbody>
           </StyledTable>
         )}
-
-        {state.loading && <PokeballLoader />}
       </Container>
+      {state.loading && <PokeballLoader />}
       <TableFooter
         currentPage={state.currentPage}
         count={state.totalPokemonCount}

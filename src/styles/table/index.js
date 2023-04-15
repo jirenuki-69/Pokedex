@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   overflow-x: auto;
-  display: flex;
   justify-content: center;
   overflow-y: hidden;
 `;
